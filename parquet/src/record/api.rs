@@ -112,6 +112,7 @@ impl<'a> Iterator for RowColumnIter<'a> {
 
 /// Trait for type-safe convenient access to fields within a Row.
 pub trait RowAccessor {
+    fn is_null(&self, i: usize) -> bool;
     fn get_bool(&self, i: usize) -> Result<bool>;
     fn get_byte(&self, i: usize) -> Result<i8>;
     fn get_short(&self, i: usize) -> Result<i16>;
@@ -197,6 +198,10 @@ impl RowFormatter for Row {
 }
 
 impl RowAccessor for Row {
+    fn is_null(&self, i: usize) -> bool {
+        self.fields[i].1 == Field::Null
+    }
+
     row_primitive_accessor!(get_bool, Bool, bool);
 
     row_primitive_accessor!(get_byte, Byte, i8);
